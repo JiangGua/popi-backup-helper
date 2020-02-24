@@ -1,7 +1,13 @@
 import os
 import time
 import json
+import re
 import requests
+
+def validateTitle(title):
+    rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
+    new_title = re.sub(rstr, "_", title)  # 替换为下划线
+    return new_title
 
 class Question():
     def __init__(self, question_id):
@@ -48,6 +54,7 @@ if __name__ == "__main__":
     sharecode = input('请输入Popi提问箱分享码：')
     user = User(sharecode)
     result = user.format()
-    with open('{}.json'.format(user.get_user_name()), 'w', encoding='utf-8') as f:
+    file_name = validateTitle(user.get_user_name())
+    with open('{}.json'.format(file_name), 'w', encoding='utf-8') as f:
         f.write(json.dumps(result))
     print("Success")
